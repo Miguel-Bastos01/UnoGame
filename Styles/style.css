@@ -15,3 +15,17 @@ body {
     height: 100vh;
   }
 
+  #game-screen{
+   display: none;
+   align-content: center;
+   padding: 20px 0px;
+   overflow: hidden;
+   position: relative;
+   background-size: cover;
+  }
+
+#win{
+  display: none;
+}
+#lose{
+  display: none;}
