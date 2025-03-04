@@ -1,4 +1,4 @@
-class game{
+class Game{
     constructor(){
         this.startScreen = document.getElementById("start-screen")
         this.gameScreen = document.getElementById("game-screen")
@@ -25,20 +25,22 @@ class game{
         this.gameScreen.style.display = "block"
 
         this.gameIntervalId = setInterval(()=> {
-            this.gameLoop()
+            this.gameLoop();},
             this.gameLoopId
-        })
+        )
     }
-    gameloop(){
+    gameLoop(){
+        if(this.player){
+            this.player.move()
+        }
         this.update();
     
-        if(this.gameover){
+        if(this.gameOver){
             clearInterval(this.gameIntervalId)
         }
     }
 
     update(){
-        this.player.move()
     }
 }
 
