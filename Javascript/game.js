@@ -29,15 +29,21 @@ class game{
             this.gameLoopId
         })
     }
-}
+    gameloop(){
+        this.update();
+    
+        if(this.gameover){
+            clearInterval(this.gameIntervalId)
+        }
+    }
 
-gameloop(){
-    this.update();
-
-    if(this.gameover){
-        clearInterval(this.gameIntervalId)
+    update(){
+        this.player.move()
     }
 }
+
+
+
 
 class deck{
     constructor(){}
