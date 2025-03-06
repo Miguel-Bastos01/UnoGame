@@ -18,6 +18,7 @@ class Game{
         this.gameLoopId = 1000/60
 
         this.deck = new deck()
+        this.playerHand = []
     }
     start(){
         this.gameScreen.style.width =  `${this.width}px`
@@ -30,6 +31,16 @@ class Game{
         console.log("Deck after shuffle", this.deck.shuffle())
 
         let [playerHand, cpuHand] = this.deck.dealCards()
+        this.playerHand = playerHand
+
+        this.updateHandCount()
+        
+        
+        const cardDrawn = document.getElementById("draw-card")
+        cardDrawn.addEventListener('click', () => {
+            this.drawCard()
+        })
+        
         
 
         this.gameIntervalId = setInterval(()=> {
@@ -38,6 +49,8 @@ class Game{
         )
     }
     gameLoop(){
+
+
         if(this.player){
             this.player.move()
         }
@@ -46,6 +59,25 @@ class Game{
         if(this.gameOver){
             clearInterval(this.gameIntervalId)
         }
+    }
+
+    updateHandCount(){
+        this.cardsLeftHTML.textContent = `Player hand count: ${this.playerHand.length}`
+    }
+
+    drawCard(playerHand){
+
+
+        if(this.deck.length > 0){
+            let drawDeck = this.deck.pop()
+            playerHand.push(drawDeck)
+            console.log(`Player drew ${drawDeck.color}, ${drawDeck.value}`)
+        
+        }
+        else {
+            console.log("No more cards")
+        }
+
     }
 
     update(){
@@ -115,4 +147,6 @@ class deck{
         return [playerHand, cpuHand]
 
     }
+
+
 }
