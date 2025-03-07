@@ -12,5 +12,15 @@ window.onload = function(){
         
         game = new Game()
         game.start()
+
+        let discardPile = document.getElementById("discard-pile")
+
+        if(!discardPile){
+            console.error("Error: Discard pile not found")
+            return
+        }
+        else{
+            console.log("Discard pile good")
+        }
     }
 }

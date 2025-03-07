@@ -31,6 +31,25 @@ body {
    position: relative;
    background-size: cover;
   }
+
+  #discard-pile {
+    width: 100px;
+    height: 150px;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: gray;
+    margin: 10px auto;
+
+  }
+
+  #played-card{
+    color: white;
+  }
   
 
 #win{

@@ -6,6 +6,9 @@ class Game{
         this.gameLose = document.getElementById("lose")
 
         this.player = null
+        this.cpuHand = []
+        this.turn ="player"
+        
 
         this.height = 600
         this.width = 500
@@ -32,6 +35,7 @@ class Game{
 
         let [playerHand, cpuHand] = this.deck.dealCards()
         this.playerHand = playerHand
+        this.cpuHand = cpuHand
 
         this.updateHandCount()
         
@@ -47,36 +51,121 @@ class Game{
             this.gameLoop();},
             this.gameLoopId
         )
+
+        this.updatePlayerHand()
     }
+
+    updatePlayerHand(){
+        let playerHandDiv = document.getElementById("player-hand")
+        playerHandDiv.innerHTML = ""
+
+        this.playerHand.forEach((card, index) => {
+            let cardButton = document.createElement("button")
+            cardButton.textContent = `${card.color} ${card.value}`
+            cardButton.style.backgroundColor = card.color
+            cardButton.addEventListener("click", () => {
+                this.playCard(card)
+            })
+            playerHandDiv.appendChild(cardButton)
+
+        })
+    }
+
+   
+
+    
     gameLoop(){
 
-
-        if(this.player){
-            this.player.move()
+        if (this.turn === "player"){
+          
+        } else if (this.turn !== "player") {
+            this.cpuPlayCard()
         }
-        this.update();
+
+        this.update()
     
         if(this.gameOver){
             clearInterval(this.gameIntervalId)
         }
     }
 
+    cpuPlayCard(){
+
+        const topDiscardCard = this.deck.discardPile[this.deck.discardPile.length - 1]
+
+        if (!topDiscardCard){
+            console.log("No cards skipping turn")
+            this.turn = "player"
+            return
+        }
+
+        let validCard = this.cpuHand.find(card => 
+            card.color === this.deck.discardPile[this.deck.discardPile.length - 1].color || 
+            card.value === this.deck.discardPile[this.deck.discardPile.length - 1].value
+        )
+
+        if(validCard){
+            console.log("CPU has valid card")
+            this.playCard(validCard)
+
+            let removeCard = this.cpuHand.indexOf(validCard)
+        this.cpuHand.splice(removeCard, 1)
+        }
+        else {
+            console.log("CPU has no valid card")
+            this.cpuHand.push(this.deck.deck.pop())
+        }
+        
+        this.turn = "player"
+
+        
+    }
+    
+
+    playCard(card){
+        let discardPile = document.getElementById("discard-pile")
+        let playedCard = document.getElementById ("played-card")
+
+        discardPile.style.backgroundColor = card.color
+        playedCard.textContent = card.value
+
+        this.deck.discardPile.push(card)
+
+        let leavePlayer = this.playerHand.indexOf(card)
+        if (leavePlayer > -1){
+            this.playerHand.splice(leavePlayer, 1)
+            this.updatePlayerHand()
+        }
+
+        this.updateHandCount()
+
+        this.turn = "cpu"
+    }
+
+
     updateHandCount(){
         this.cardsLeftHTML.textContent = `Player hand count: ${this.playerHand.length}`
     }
 
-    drawCard(playerHand){
+    drawCard() {
+
+        if (this.deck.deck.length === 0){
+            this.deck.reshuffleDeck()
+        }
 
 
-        if(this.deck.length > 0){
-            let drawDeck = this.deck.pop()
-            playerHand.push(drawDeck)
+        if(this.deck.deck.length > 0){
+            let drawDeck = this.deck.deck.pop()
+            this.playerHand.push(drawDeck)
             console.log(`Player drew ${drawDeck.color}, ${drawDeck.value}`)
+            this.updateHandCount()
         
         }
         else {
             console.log("No more cards")
         }
+
+        this.turn = "cpu"
 
     }
 
@@ -90,6 +179,7 @@ class Game{
 class deck{
     constructor(){
         this.deck = []
+        this.discardPile = []
     }
     
     poplateDeck(){
@@ -142,10 +232,24 @@ class deck{
             let otherCard = this.deck.pop()
             cpuHand.push(otherCard)
         }
+
+        this.discardPile.push(this.deck.pop());
+
+
         console.log("Player Hand after dealing:", playerHand)
         console.log("CPU Hand after dealing:", cpuHand)
         return [playerHand, cpuHand]
 
+    }
+
+    reshuffleDeck(){
+        if (this.discardPile.length > 1)
+            console.log("reshuffling")
+
+        this.deck = [...this.deck, ...this.discardPile.splice(0, this.discardPile.length - 1)]
+        this.shuffle()
+
+        console.log("New deck:", this.deck)
     }
 
 
