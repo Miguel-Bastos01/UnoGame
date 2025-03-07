@@ -82,6 +82,14 @@ class Game{
             this.cpuPlayCard()
         }
 
+        if (this.playerHand.length === 0){
+            this.gameWin.style.display = "block"
+            this.gameScreen.style.display = "none"
+        } else if (this.cpuHand.length === 0){
+            this.gameLose.style.display = "block"
+            this.gameScreen.style.display = "none"
+        }
+
         this.update()
     
         if(this.gameOver){
@@ -90,6 +98,9 @@ class Game{
     }
 
     cpuPlayCard(){
+
+        const cpuCounter = document.getElementById("cpu-counter")
+        cpuCounter.textContent = `CPU hand count: ${this.cpuHand.length}`
 
         const topDiscardCard = this.deck.discardPile[this.deck.discardPile.length - 1]
 
@@ -159,6 +170,14 @@ class Game{
             this.playerHand.push(drawDeck)
             console.log(`Player drew ${drawDeck.color}, ${drawDeck.value}`)
             this.updateHandCount()
+
+            const cardButton = document.createElement("button")
+        cardButton.textContent = `${drawDeck.color} ${drawDeck.value}`
+        cardButton.style.backgroundColor = drawDeck.color
+        let playerHandDiv = document.getElementById("player-hand")
+        playerHandDiv.appendChild(cardButton)
+
+        this.updateHandCount()
         
         }
         else {
