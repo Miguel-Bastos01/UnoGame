@@ -23,16 +23,50 @@ body {
     margin: -20px auto;
   }
 
+
+  #start-screen button {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+
+  }
+
+  #start-screen button:hover {
+    background-color: #e65c00;
+  }
+
+  #game-screen, #win, #lose {
+    display: none;
+  }
+
   #game-screen{
    display: flex;
+   flex-direction: column;
+   align-items: center;
    justify-content: center;
-   align-content: center;
-   height: 100vh;
-   width: 100vh;
-   padding: 20px 0px;
+   padding: 20px 0;
    overflow: hidden;
    position: relative;
    background-size: cover;
+   width: 100vw;
+   height: 100vh;
+   background-image: url(/UnoGame/images/STACK-EM-BACKGROUND.jpg);
+   background-position: center;
+   background-repeat: no-repeat;
+
+   
+
+  }
+
+  #cemtral-area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px
   }
 
   #discard-pile {
@@ -41,8 +75,7 @@ body {
     border: 2px solid black;
     display: flex;
     justify-content: center;
-    align-content: center;
-    flex-direction: column;
+    align-items: center;
     font-size: 2rem;
     font-weight: bold;
     background-color: gray;
@@ -57,9 +90,87 @@ body {
   
   }
   
+  #card-counters, #cpu-counter{
+    font-size: 1.5rem;
+    margin: 10px;
+    color: white;
+    font-weight: bold;
+  }
 
-#win{
+  #player-hand, #cpu-hand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #ddd;
+    margin: 0 10px;
+  }
+
+  button.card-button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    text-align: center;
+  }
+
+  button.card-button:hover{
+    opacity: 0.8;
+  }
+
+  #cpu-no-card {
+    font-size: 1.2rem;
+    color: #ff0000;
+    display: none;
+  }
+
+#win, #lose{
   display: none;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-#lose{
-  display: none;}
+
+
+#win h2, #lose h3 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+
+
+#button-section {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+#win button, #lose button {
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  background-color: #ff6f00;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
+
+#win button:hover, #lose button:hover{
+  background-color: #e65c00;
+}
+
+#notification-box {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #000;
+  display: flex;
+  justify-content: center;
+}
