@@ -4,6 +4,7 @@ class Game{
         this.gameScreen = document.getElementById("game-screen")
         this.gameWin = document.getElementById("win")
         this.gameLose = document.getElementById("lose")
+        this.cpuDrawCard = document.getElementById ("cpu-no-card")
 
         this.player = null
         this.cpuHand = []
@@ -19,6 +20,10 @@ class Game{
         this.gameOver = false
         this.gameIntervalId
         this.gameLoopId = 1000/60
+        this.playAgainButton = document.getElementById("play-again")
+        if (this.playAgainButton){
+            this.playAgainButton.addEventListener("click", () => this.playAgain())
+        }
 
         this.deck = new deck()
         this.playerHand = []
@@ -38,6 +43,17 @@ class Game{
         this.cpuHand = cpuHand
 
         this.updateHandCount()
+
+        let startingCard = this.deck.deck.pop()
+        this.deck.discardPile.push(startingCard)
+
+        let discardPile = document.getElementById("discard-pile")
+        let playedCard = document.getElementById("played-card")
+
+        discardPile.style.backgroundColor = startingCard.color
+        discardPile.textContent = startingCard.value
+        playedCard.style.color = "white"
+        playedCard.style.fontWeight ="bold"
         
         
         const cardDrawn = document.getElementById("draw-card")
@@ -63,6 +79,7 @@ class Game{
             let cardButton = document.createElement("button")
             cardButton.textContent = `${card.color} ${card.value}`
             cardButton.style.backgroundColor = card.color
+
             cardButton.addEventListener("click", () => {
                 this.playCard(card)
             })
@@ -118,13 +135,25 @@ class Game{
         if(validCard){
             console.log("CPU has valid card")
             this.playCard(validCard)
+            this.cpuDrawCard.style.display = "none"
+            this.cpuDrawCard.style.flexdirection ="center"
+            
 
             let removeCard = this.cpuHand.indexOf(validCard)
         this.cpuHand.splice(removeCard, 1)
         }
         else {
             console.log("CPU has no valid card")
+            const noCardMsg = this.cpuDrawCard
+            noCardMsg.textContent = "CPU Drew card play again"
+            noCardMsg.style.display = "flex"
             this.cpuHand.push(this.deck.deck.pop())
+
+            setTimeout(() => {
+                this.cpuDrawCard.style.display = "none"
+                this.turn = "player"
+                
+            }, 1000);
         }
         
         this.turn = "player"
@@ -137,6 +166,18 @@ class Game{
         let discardPile = document.getElementById("discard-pile")
         let playedCard = document.getElementById ("played-card")
 
+        if (!playedCard){
+            console.error("played card not found")
+            return
+        }
+
+        let topCard = this.deck.discardPile[this.deck.discardPile.length - 1]
+
+
+            if (card.color !== topCard.color && card.value !== topCard.value){
+                console.log("Invalid card")
+            return}   
+
         discardPile.style.backgroundColor = card.color
         playedCard.textContent = card.value
 
@@ -146,11 +187,15 @@ class Game{
         if (leavePlayer > -1){
             this.playerHand.splice(leavePlayer, 1)
             this.updatePlayerHand()
-        }
+        
 
         this.updateHandCount()
 
-        this.turn = "cpu"
+        this.turn = "cpu"}
+
+        else {
+            console.error("Played card not found")
+        }
     }
 
 
@@ -169,7 +214,10 @@ class Game{
             let drawDeck = this.deck.deck.pop()
             this.playerHand.push(drawDeck)
             console.log(`Player drew ${drawDeck.color}, ${drawDeck.value}`)
+
             this.updateHandCount()
+            this.updatePlayerHand()
+
 
             const cardButton = document.createElement("button")
         cardButton.textContent = `${drawDeck.color} ${drawDeck.value}`
@@ -178,6 +226,7 @@ class Game{
         playerHandDiv.appendChild(cardButton)
 
         this.updateHandCount()
+        this.updatePlayerHand()
         
         }
         else {
@@ -189,6 +238,23 @@ class Game{
     }
 
     update(){
+    }
+
+    playAgain(){
+        document.getElementById("win").style.display = "none"
+        document.getElementById("lose").style.display = "none"
+        document.getElementById("game-screen").style.display = "block"
+
+        this.turns = 0
+        this.gameOver = false
+
+        document.getElementById("card-counters").textContent = "Player hand count: 8"
+        document.getElementById("cpu-counters").textContent = "Cpu hand count: 8"
+
+        const playedCard = document.getElementById("played-card")
+        if (playedCard) playedCard.textContent = ""
+
+    
     }
 }
 

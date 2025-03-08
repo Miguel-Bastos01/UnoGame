@@ -48,7 +48,10 @@ body {
   }
 
   #played-card{
+    display: block;
     color: white;
+    font-weight: bold;
+  
   }
   
 
