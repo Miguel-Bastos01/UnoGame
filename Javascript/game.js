@@ -244,15 +244,37 @@ class Game{
         document.getElementById("win").style.display = "none"
         document.getElementById("lose").style.display = "none"
         document.getElementById("game-screen").style.display = "block"
+        document.getElementById("start-screen").style.display ="none"
 
-        this.turns = 0
         this.gameOver = false
+        this.turn = "player"
+        this.cardsLeft = 8
 
-        document.getElementById("card-counters").textContent = "Player hand count: 8"
-        document.getElementById("cpu-counters").textContent = "Cpu hand count: 8"
+        this.playerHand = []
+        this.cpuHand = []
+
+        this.deck = new deck()
+        let [playerHand, cpuHand] = this.deck.dealCards()
+        this.playerHand = playerHand
+        this.cpuHand = cpuHand
+
+        this.updateHandCount()
 
         const playedCard = document.getElementById("played-card")
         if (playedCard) playedCard.textContent = ""
+
+        document.getElementById("card-counters").textContent = `Player hand count: ${this.playerHand.length}`
+        document.getElementById("cpu-counters").textContent = `Cpu hand count: 8 ${this.cpuHand.length}`
+
+        let discardPile = document.getElementById("discard-pile")
+        discardPile.style.backgroundColor = "white"
+        discardPile.textContent = ""
+
+        this.updatePlayerHand()
+
+        this.gameIntervalId = setInterval(() => this.gameLoop(), this.gameLoopId())
+
+        
 
     
     }
